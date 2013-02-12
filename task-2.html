@@ -37,10 +37,10 @@ var topCoat = [{
 function cloneData (orgData) {
 	if(orgData == null || typeof(orgData) != 'object')
         return orgData;
-	var a = new orgData.constructor(); ;
+	var a = new orgData.constructor();
 	for(var i in orgData) {
 		a[i] = cloneData(orgData[i])
-	};
+	}
 	return a;
 }
 
