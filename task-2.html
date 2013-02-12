@@ -7,30 +7,30 @@
 
 <script type="text/javascript">
 var topCoat = [{
-		coat: {
-				model: "coat1",
-				size: {
-						agegroup: "adult",
-						mark: ["M", "L", "XL"],
-						},
-				color: "red",
-				description: "blah blah",
-				madein: {
-							europe: {
-										france: {
-													prodName: "Prod 1",
-													adress: [{
-																city: "Paris",
-																street: "Boulevard 1"
-															  },
-															  {
-																city: "Monreal",
-																street: "Boulevard 2"
-															  }],
-												  }
-									  }
-						  }
-				}				
+	coat: {
+		model: "coat1",
+		size: {
+			agegroup: "adult",
+			mark: ["M", "L", "XL"],
+ 		},
+		color: "red",
+		description: "blah blah",
+		madein: {
+			europe: {
+				france: {
+					prodName: "Prod 1",
+					adress: [{
+						city: "Paris",
+						street: "Boulevard 1"
+					},
+					{
+						city: "Monreal",
+						street: "Boulevard 2"
+					}],
+				}
+			}
+		}
+	}				
 }];
 
 // clone an array
@@ -41,7 +41,7 @@ var cloneData = function (orgData) {
 	return a;
 }
 // checking results
-console.log(cloneData(topCoat));
+console.log("cloning: ", cloneData(topCoat));
 
 var fname1 = function(arg1, arg2, arg3) {
 				arg1 = arg3;
