@@ -34,21 +34,31 @@ var topCoat = [{
 }];
 
 // clone an array
-var cloneData = function (orgData) {
-	var a = new Array ();
-	for(i=0;  i< orgData.length;  i++) 
-		{a[i] = orgData[i]};
+function cloneData (orgData) {
+	if(orgData == null || typeof(orgData) != 'object')
+        return orgData;
+	var a = new orgData.constructor(); ;
+	for(var i in orgData) {
+		a[i] = cloneData(orgData[i])
+	};
 	return a;
 }
-// checking results
-console.log("cloning: ", cloneData(topCoat));
+
+//test cloning
+var topCoatClone = cloneData(topCoat);
+topCoat[0].coat.model = "wrongModel";
+console.log("2: ", topCoatClone[0].coat.model);
+console.log(cloneData({ a: 1, b: 2, c: 3 }));
 
 var fname1 = function(arg1, arg2, arg3) {
 		arg1 = arg3;
                 return arg1 + arg2;
 };
-			 
-var result = new Array (topCoat[0].coat.madein.europe.france.adress[0].city, topCoat[0]["coat"]["model"]);
+
+console.log(topCoatClone[0].coat.model);
+
+// check this topCoat[0]["coat"]["madein"]["europe"]["france"]["adress"][0]["city"]			 
+var result = new Array (topCoatClone[0].coat.madein.europe.france.adress[0].city, topCoatClone[0]["coat"]["model"]);
 console.log("before: ", result);
 result = fname1(topCoat[0].coat.madein.europe.france.adress[0].city, topCoat[0]["coat"]["model"], "Tulsa");
 console.log("after:", result);
