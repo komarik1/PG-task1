@@ -61,16 +61,12 @@ Object.prototype.foo="bar";
 
 // clone an array
 function cloneData (orgData) {
-	console.log("orgData ===> ",JSON.stringify(orgData));
 	if(orgData == null || typeof(orgData) != 'object'){ 
-		console.log("return:+++", JSON.stringify(orgData)); 
-		return orgData;
+			return orgData;
 	}
 	var a = new orgData.constructor();
 	for(var key in orgData) {
 		if ( orgData.hasOwnProperty(key) ){
-			console.log(key,"---> ", JSON.stringify(orgData[key]));
-			console.log("~~~~~~~~~~");
 			a[key] = cloneData(orgData[key]);
 		}
 		
@@ -79,10 +75,31 @@ function cloneData (orgData) {
 	return a;
 }
 
+//clone an array *solution 2*
+
+var obj = {};
+
+function cloneData2 (orgData) {
+	if(orgData == null || typeof(orgData) != 'object'){ 
+		return orgData;
+	}
+	var a = new orgData.constructor();
+	for(var key in orgData) {
+		if (!(key in obj)){
+			a[key] = cloneData2(orgData[key]);
+		}		
+	}
+
+	return a;
+}
+
 //test cloning
-var topCoatClone = cloneData(topCoat);
+var topCoatClone1 = cloneData(topCoat);
+var topCoatClone2 = cloneData2(topCoat);
 topCoat[0].coat.model = "wrongModel";
-console.log("2: ", topCoatClone[0].coat.model);
+console.log("changed: ", topCoat[0].coat.model);
+console.log("clone sol-1: ", topCoatClone1[0].coat.model);
+console.log("clone sol-2: ", topCoatClone2[0].coat.model);
 console.log(JSON.stringify(cloneData({ a: 1, b: 2, c: 3 })));
 
 var fname1 = function(arg1, arg2, arg3) {
@@ -90,10 +107,10 @@ var fname1 = function(arg1, arg2, arg3) {
                 return arg1 + arg2;
 };
 
-console.log(topCoatClone[0].coat.model);
+console.log(topCoatClone1[0].coat.model);
 
 // check this topCoat[0]["coat"]["madein"]["europe"]["france"]["adress"][0]["city"]			 
-var result = new Array (topCoatClone[0].coat.madein.europe.france.adress[0].city, topCoatClone[0]["coat"]["model"]);
+var result = new Array (topCoatClone1[0].coat.madein.europe.france.adress[0].city, topCoatClone1[0]["coat"]["model"]);
 console.log("before: ", result);
 console.log("STRINGI-before: ", JSON.stringify(result));
 result = fname1(topCoat[0].coat.madein.europe.france.adress[0].city, topCoat[0]["coat"]["model"], "Tulsa");
