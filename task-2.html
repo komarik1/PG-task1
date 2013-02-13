@@ -67,11 +67,11 @@ function cloneData (orgData) {
 		return orgData;
 	}
 	var a = new orgData.constructor();
-	for(var i in orgData) {
-		if ( orgData.hasOwnProperty(i) ){
-			console.log(i,"---> ", JSON.stringify(orgData[i]));
+	for(var key in orgData) {
+		if ( orgData.hasOwnProperty(key) ){
+			console.log(key,"---> ", JSON.stringify(orgData[key]));
 			console.log("~~~~~~~~~~");
-			a[i] = cloneData(orgData[i]);
+			a[key] = cloneData(orgData[key]);
 		}
 		
 	}
