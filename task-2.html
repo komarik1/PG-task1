@@ -30,17 +30,51 @@ var topCoat = [{
 				}
 			}
 		}
+	},
+	raincoat: {
+		model: "rain1",
+		size: {
+			agegroup: "adult",
+			mark: ["M", "L", "XL"],
+ 		},
+		color: "blue",
+		description: "222 222 222",
+		madein: {
+			ausia: {
+				china: {
+					prodName: "Prod 2",
+					adress: [{
+						city: "China Str 1",
+						street: "Boulevard 1"
+					},
+					{
+						city: "Pekin",
+						street: "Chanal 22"
+					}],
+				}
+			}
+		}
 	}				
 }];
 
+Object.prototype.foo="bar";
+
 // clone an array
 function cloneData (orgData) {
-	if(orgData == null || typeof(orgData) != 'object')
-        return orgData;
+	console.log("orgData ===> ",JSON.stringify(orgData));
+	if(orgData == null || typeof(orgData) != 'object'){ 
+		console.log("return:+++", JSON.stringify(orgData)); 
+		return orgData;
+	}
 	var a = new orgData.constructor();
 	for(var i in orgData) {
-		a[i] = cloneData(orgData[i])
+		if ( orgData.hasOwnProperty(i) ){
+			console.log(i,"---> ", JSON.stringify(orgData[i]));
+			a[i] = cloneData(orgData[i]);
+		}
+		
 	}
+
 	return a;
 }
 
@@ -48,7 +82,7 @@ function cloneData (orgData) {
 var topCoatClone = cloneData(topCoat);
 topCoat[0].coat.model = "wrongModel";
 console.log("2: ", topCoatClone[0].coat.model);
-console.log(cloneData({ a: 1, b: 2, c: 3 }));
+console.log(JSON.stringify(cloneData({ a: 1, b: 2, c: 3 })));
 
 var fname1 = function(arg1, arg2, arg3) {
 		arg1 = arg3;
@@ -60,6 +94,7 @@ console.log(topCoatClone[0].coat.model);
 // check this topCoat[0]["coat"]["madein"]["europe"]["france"]["adress"][0]["city"]			 
 var result = new Array (topCoatClone[0].coat.madein.europe.france.adress[0].city, topCoatClone[0]["coat"]["model"]);
 console.log("before: ", result);
+console.log("STRINGI-before: ", JSON.stringify(result));
 result = fname1(topCoat[0].coat.madein.europe.france.adress[0].city, topCoat[0]["coat"]["model"], "Tulsa");
 console.log("after:", result);
 
