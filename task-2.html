@@ -70,6 +70,7 @@ function cloneData (orgData) {
 	for(var i in orgData) {
 		if ( orgData.hasOwnProperty(i) ){
 			console.log(i,"---> ", JSON.stringify(orgData[i]));
+			console.log("~~~~~~~~~~");
 			a[i] = cloneData(orgData[i]);
 		}
 		
