@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<head><title>Testing DOM</title></head>
+<body>
+
+    <div id="someId">Some txt</div>
+
+    <script>
+
+        var someDiv = document.getElementById("someId");
+        var newDiv = document.createElement("div");
+	
+	document.getElementById("someId").innerHTML += " + aaa" + " [1]";
+	newDiv.innerHTML = "lalala";
+        someDiv.appendChild(newDiv);
+
+    </script>
+</body>
+</html>
