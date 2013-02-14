@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <head><title>Testing DOM</title></head>
 <body>
 
@@ -8,10 +8,13 @@
 
         var someDiv = document.getElementById("someId");
         var newDiv = document.createElement("div");
+	var newTxt = document.createTextNode("something new");
 	
 	document.getElementById("someId").innerHTML += " + aaa";
+	someDiv.appendChild(newTxt);
 	newDiv.innerHTML = "lalala";
-        someDiv.appendChild(newDiv);
+	someDiv.appendChild(newDiv);
+        
 
     </script>
 </body>
