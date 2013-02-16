@@ -3,19 +3,33 @@
 <body>
 
     <div id="someId">Some txt</div>
+    <div id="otherId">Some OTHER txt</div>
 
     <script>
 
         var someDiv = document.getElementById("someId");
         var newDiv = document.createElement("div");
 	var newTxt = document.createTextNode("something new");
-	
+
 	document.getElementById("someId").innerHTML += " + aaa";
 	someDiv.appendChild(newTxt);
 	newDiv.innerHTML = "lalala";
 	someDiv.appendChild(newDiv);
-        
-
+    
+	function applyCSS(id, arg){
+		var str =  '';
+		for (var key in arg){
+			if (typeof arg[key] == 'string') {
+				str += key +':'+arg[key]+";"
+			}
+		}
+		var stl = document.createElement("style");
+		stl.innerHTML='#'+id+'{'+str+'}';
+		document.getElementById(id).appendChild(stl);
+		};  
+ 
+	applyCSS("someId", {"font-weight":"bold", "color": "#777", "background":"lightblue"});
+ 	
     </script>
 </body>
 </html>
