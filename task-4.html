@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<head><title>Testing DOM</title></head>
+<body>
+
+    <div id="someId">Some txt</div>
+    <div id="otherId">Some OTHER txt</div>
+
+    <script>
+
+	
+	function applyCSS(id, arg){
+		var str =  '';
+		for (var key in arg){
+			if (typeof arg[key] == 'string') {
+				str += key +':'+arg[key]+";"
+			}
+		}
+		var stl = document.createElement("style");
+		stl.innerHTML='#'+id+'{'+str+'}';
+		document.getElementById(id).appendChild(stl);
+		}; 
+
+    
+	function cloneDOM(id1,id2){
+		var fromCont = document.getElementById(id1);
+		var toCont = document.getElementById(id2);
+
+		var container = fromCont.cloneNode(true);
+		toCont.appendChild(container);
+	}
+
+	//cloneDOM("someId", "otherId");
+	
+	//applyCSS("someId", {"font-weight":"bold", "color": "#777", "background":"lightblue"});
+	
+ 	
+    </script>
+	<button onclick ='applyCSS("someId", {"font-weight":"bold", "color": "#777", "background":"lightblue"});'>
+		Apply CSS 
+	</button>
+	<button onclick ="cloneDOM('someId', 'otherId');">colne dom</button>
+</body>
+</html>
