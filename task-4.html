@@ -2,42 +2,39 @@
 <head><title>Testing DOM</title></head>
 <body>
 
-    <div id="someId">Some txt</div>
-    <div id="otherId">Some OTHER txt</div>
+<div id="someId">Some txt</div>
+<div id="otherId">Some OTHER txt</div>
 
-    <script>
+<script src="task-4.js"></script>
 
+<button onclick ='applyCSS("someId", {"font-weight":"bold", "color": "#777", "background":"lightblue"});'>Apply CSS </button>
 	
-	function applyCSS(id, arg){
-		var str =  '';
-		for (var key in arg){
-			if (typeof arg[key] == 'string') {
-				str += key +':'+arg[key]+";"
-			}
-		}
-		var stl = document.createElement("style");
-		stl.innerHTML='#'+id+'{'+str+'}';
-		document.getElementById(id).appendChild(stl);
-		}; 
+<script>
 
-    
-	function cloneDOM(id1,id2){
-		var fromCont = document.getElementById(id1);
-		var toCont = document.getElementById(id2);
 
-		var container = fromCont.cloneNode(true);
-		toCont.appendChild(container);
+function clone2(node) {
+	if (node == null || typeof(node) != 'object') {
+		return node;
 	}
+	var children = node.childNodes;
+	var a = node;
+	for(var key in children){
+		a[key] = clone2(children[key]);
+	}
+	return a;
+}
 
-	//cloneDOM("someId", "otherId");
-	
-	//applyCSS("someId", {"font-weight":"bold", "color": "#777", "background":"lightblue"});
-	
- 	
-    </script>
-	<button onclick ='applyCSS("someId", {"font-weight":"bold", "color": "#777", "background":"lightblue"});'>
-		Apply CSS 
-	</button>
-	<button onclick ="cloneDOM('someId', 'otherId');">colne dom</button>
+	var domElement = document.getElementById("someId");
+	var clonedElement = clone(domElement);
+	clonedElement.style.opacity = "0.5";
+	domElement.parentNode.appendChild(clonedElement);
+/*
+	var domElement = document.getElementById("someId");
+	var clonedElement = clone2(domElement);
+	clonedElement.style.opacity = "0.3";
+	domElement.parentNode.appendChild(clonedElement);
+*/
+
+</script>
 </body>
 </html>
