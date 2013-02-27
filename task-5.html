@@ -62,11 +62,11 @@ $(document).ready(function() {
 		var moved = false;
 
 		if ($(this).parent().hasClass('from') && !moved) {
-			$(this).appendTo('.to'); 
+			$(this).detach().prependTo('.to'); 
 			moved = true;
 		}
 		if ($(this).parent().hasClass('to') && !moved) {
-			$(this).appendTo('.from'); 
+			$(this).detach().prependTo('.from'); 
 			moved = true;
 		} 
 	});
