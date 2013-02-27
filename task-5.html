@@ -59,15 +59,12 @@ function number5() {
 
 $(document).ready(function() {
 	$(".container > div").click(function() { 
-		var moved = false;
-
-		if ($(this).parent().hasClass('from') && !moved) {
-			$(this).detach().prependTo('.to'); 
-			moved = true;
-		}
-		if ($(this).parent().hasClass('to') && !moved) {
-			$(this).detach().prependTo('.from'); 
-			moved = true;
+		if (!($(this).hasClass('moved'))) {
+			$(this).detach().addClass('moved').prependTo('.to') 
+		} else if ($(this).hasClass('moved'))
+		{
+			$(this).detach().removeClass('moved').prependTo('.from')
+			
 		} 
 	});
 });
