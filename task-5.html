@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Working with jQuery</title>
+<style>
+.cloneable {
+    float: left;
+    opacity: 0.9;
+    background-color: #fff;
+    border: solid 1px #ccc;
+    padding: 5px;
+    margin: 5px;
+}
+.container {
+    margin: 10px;
+    float: left;
+    border: solid 1px #222;
+    border-radius: 5px;
+    min-height: 100px;
+    min-width: 100px;
+}
+.from { background-color: #faa; }
+.to { background-color: #afa; }
+</style>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js" type="text/javascript"></script>
+</head>
+<body>
+<button onclick ='$(number5);'>N 5 </button>
+<br>
+    <div class="cloneable container from">
+        <div class="cloneable" id="1">
+            <h3>First form</h3>
+            <textarea rows="3" cols="20">Text area</textarea><br>
+        </div>
+        <div class="cloneable" id="2">
+            <h3>Second form</h3>
+            <textarea rows="3" cols="20">Text area</textarea><br>
+        </div>
+    </div>
+
+    <div class="cloneable container to">
+    </div>
+
+
+<script>
+
+    $("#1")
+    $("#2")
+    $(".cloneable")
+    $("div")
+    $("div > div")
+
+
+
+
+function number5() {
+	$(".from > div").appendTo('.to');
+}
+
+$(document).ready(function() {
+	$(".container > div").click(function() { 
+		var moved = false;
+
+		if ($(this).parent().hasClass('from') && !moved) {
+			$(this).appendTo('.to'); 
+			moved = true;
+		}
+		if ($(this).parent().hasClass('to') && !moved) {
+			$(this).appendTo('.from'); 
+			moved = true;
+		} 
+	});
+});
+
+</script>
+
+</body>
+</html>
