@@ -1,27 +1,42 @@
-var Controller = Backbone.Router.extend({
-    routes: {
-        "": "start", // Пустой hash-тэг
-        "!/": "start", // Начальная страница
-        "!/success": "success", // Блок удачи
-        "!/error": "error" // Блок ошибки
-    },
+п»їvar Controller = Backbone.Router.extend({
+  routes: {
+    "": 'start', // РџСѓСЃС‚РѕР№ hash-С‚СЌРі
+    "!/": 'start', // РќР°С‡Р°Р»СЊРЅР°СЏ СЃС‚СЂР°РЅРёС†Р°
+    "!/success": 'success', // Р‘Р»РѕРє СѓРґР°С‡Рё
+    "!/error": 'error' // Р‘Р»РѕРє РѕС€РёР±РєРё
+  },
 
-    start: function () {
-        $(".block").hide(); // Прячем все блоки
-        $("#start").show(); // Показываем нужный
-    },
+  'start': function () {
+    $(".block").hide(); // РџСЂСЏС‡РµРј РІСЃРµ Р±Р»РѕРєРё
+    $("#start").show(); // РџРѕРєР°Р·С‹РІР°РµРј РЅСѓР¶РЅС‹Р№
+  },
 
-    success: function () {
-        $(".block").hide();
-        $("#success").show();
-    },
+  success: function () {
+    $(".block").hide();
+    $("#success").show();
+  },
 
-    error: function () {
-        $(".block").hide();
-        $("#error").show();
+  'error': function () {
+    $(".block").hide();
+    $("#error").show();
+  }
+});
+var controller = new Controller(); // РЎРѕР·РґР°С‘Рј РєРѕРЅС‚СЂРѕР»Р»РµСЂ
+Backbone.history.start();  // Р—Р°РїСѓСЃРєР°РµРј HTML5 History push
+
+var Start = Backbone.View.extend({
+    el: $("#start"), // DOM СЌР»РµРјРµРЅС‚ widget'Р°
+    events: {
+        "click input:button": "check" // РћР±СЂР°Р±РѕС‚С‡РёРє РєР»РёРєР° РЅР° РєРЅРѕРїРєРµ "РџСЂРѕРІРµСЂРёС‚СЊ"
+    },
+    check: function () {
+        if (this.$("input:text").val() == "test") // РџСЂРѕРІРµСЂРєР° С‚РµРєСЃС‚Р°
+            controller.navigate("!/success", true); // РїРµСЂРµС…РѕРґ РЅР° СЃС‚СЂР°РЅРёС†Сѓ success
+        else
+            controller.navigate("!/error", true); // РїРµСЂРµС…РѕРґ РЅР° СЃС‚СЂР°РЅРёС†Сѓ error
     }
 });
 
-var controller = new Controller(); // Создаём контроллер
 
-Backbone.history.start();  // Запускаем HTML5 History push 
+var start = new Start();
+
