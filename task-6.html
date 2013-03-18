@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+<head><title>Working with objects and state</title></head>
+<style>
+.example-box {
+    border-radius: 7px;
+    box-shadow: 0px 10px 15px #866;
+    margin: 50px;
+    padding: 5px;
+    width: 150px;
+    border: solid 1px #800;
+    background-color: #fcc;
+}
+
+.non-selectable {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.clickable {
+    cursor: pointer;
+}
+
+.rotating {
+    transform: rotate(0deg);
+    -webkit-transform: rotate(0deg);
+}
+
+body {
+    font-family: 'Helvetica', sans-serif;
+    font-size: 12pt;
+    background-color: #eee;
+}
+
+article {
+    border-radius: 10px;
+    background-color: white;
+    width: 600px;
+    padding: 10px;
+}
+
+.centered {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.vertically-spaced {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+iframe, .iframe-wrap {
+    width: 250px;
+    height: 145px;
+    border: none;
+    overflow: hidden;
+}
+
+pre {
+    font-family: "Courier New", monospace;
+    font-size: 14px;
+}
+
+</style>
+<body>
+
+
+    <div class="rotating non-selectable clickable example-box centered">
+      This text is rotated at <b>0&deg;</b> angle. Try clicking it.
+    </div>
+	<div class="rotating non-selectable clickable example-box centered">
+      This text is rotated at <b>0&deg;</b> angle. Try clicking it.
+    </div>
+
+ 
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js" type="text/javascript"></script>
+<script>
+
+/*
+ * Set the CSS property in a way compatible with many browsers.
+ */
+function setBrowserIndependentProperty(div, property, value) {
+    div.style["transform"] = value;
+    div.style["-ms-transform"] = value;
+    div.style["-o-transform"] = value;
+    div.style["-moz-transform"] = value;
+    div.style["-webkit-transform"] = value;
+}
+
+
+function Wobbler(element, a1, a2) {
+	this.element = element;
+	this.n = 0;
+	this.interval;
+	this.amplitude = (Math.abs(a1)+Math.abs(a2))/2;
+	//this.slope = Math.abs(this.amplitude - Math.abs(a1));
+	this.slope = (a1+a2)/2;
+	this.replaceNumber(this.amplitude*2);
+	
+	var self = this;
+	this.start();
+	$(this.element).mousedown(function() { self.stop(); });
+	$(document).mouseup(function() { self.start(); });
+}
+
+Wobbler.prototype.start = function() {
+	var self = this;
+	self.stop();
+	this.interval = setInterval( function() { self.rotateElement(); }, 16);
+	return this.interval;
+}
+
+Wobbler.prototype.stop = function() {
+	clearInterval(this.interval);
+}
+
+Wobbler.prototype.rotateElement = function() {
+	var rotateDegree = Math.sin(this.n/16)*this.amplitude + this.slope; 
+	var rotateCSSProperty = "rotate(" + rotateDegree + "deg)";
+	setBrowserIndependentProperty(this.element, "transform", rotateCSSProperty);
+	this.n++;
+	return this.n;
+}
+
+Wobbler.prototype.replaceNumber = function(newNumber) {
+    // Replace the string of digits (and a minus) with a given value of amplitude.
+    var re = new RegExp("([^0-9-]*)[-0-9.]+(.*)");
+    var resultsArray = re.exec(this.element.innerHTML);
+    this.element.innerHTML = resultsArray[1] + newNumber + resultsArray[2];
+}
+
+
+$(".rotating").each(function(i, div) { new Wobbler(div, -90, 0); });
+
+
+</script>
+
+</body>
+</html>
