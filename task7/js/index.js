@@ -1,42 +1,85 @@
-﻿var Controller = Backbone.Router.extend({
-  routes: {
-    "": 'start', // Пустой hash-тэг
-    "!/": 'start', // Начальная страница
-    "!/success": 'success', // Блок удачи
-    "!/error": 'error' // Блок ошибки
-  },
-
-  'start': function () {
-    $(".block").hide(); // Прячем все блоки
-    $("#start").show(); // Показываем нужный
-  },
-
-  success: function () {
-    $(".block").hide();
-    $("#success").show();
-  },
-
-  'error': function () {
-    $(".block").hide();
-    $("#error").show();
-  }
-});
-var controller = new Controller(); // Создаём контроллер
-Backbone.history.start();  // Запускаем HTML5 History push
+﻿var AppState = {
+    username: ""
+};
 
 var Start = Backbone.View.extend({
-    el: $("#start"), // DOM элемент widget'а
+    el: $("#block"), // DOM элемент widget'а
+
+    template: _.template($('#start').html()),
+
     events: {
         "click input:button": "check" // Обработчик клика на кнопке "Проверить"
     },
+
     check: function () {
-        if (this.$("input:text").val() == "test") // Проверка текста
+        AppState.username = this.$("input:text").val(); // Сохранение имени пользователя
+        if (AppState.username == "test") {// Проверка имени пользователя
             controller.navigate("!/success", true); // переход на страницу success
-        else
+        } else {
             controller.navigate("!/error", true); // переход на страницу error
+	}
+    },
+
+    render: function () {
+        $(this.el).html(this.template());
     }
 });
 
+var Success = Backbone.View.extend({
+    el: $("#block"), // DOM элемент widget'а
 
-var start = new Start();
+    template: _.template($('#success').html()),
+
+    render: function () {
+        $(this.el).html(this.template(AppState));
+    }
+});
+
+var Error = Backbone.View.extend({
+    el: $("#block"), // DOM элемент widget'а
+
+    template: _.template($('#error').html()),
+
+    render: function () {
+        $(this.el).html(this.template(AppState));
+    }
+});
+
+var Views = { 
+            start: new Start(),
+            success: new Success(),
+            error: new Error()
+        };
+
+var Controller = Backbone.Router.extend({
+    routes: {
+        "": "start", // Пустой hash-тэг
+        "!/": "start", // Начальная страница
+        "!/success": "success", // Блок удачи
+        "!/error": "error" // Блок ошибки
+    },
+
+    start: function () {
+        if (Views.start != null) {
+            Views.start.render();
+        }
+    },
+
+    success: function () {
+        if (Views.success != null) {
+            Views.success.render();
+        }
+    },
+
+    error: function () {
+        if (Views.error != null) {
+            Views.error.render();
+        }
+    }
+});
+
+var controller = new Controller(); // Создаём контроллер
+Backbone.history.start();  // Запускаем HTML5 History push
+
+
 
