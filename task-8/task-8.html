@@ -90,7 +90,10 @@ var RestaurantModel = GenericRestaurantModel.extend({
 					if (this.attributes.currentOccupancy == 0)
 						GenericRestaurantModel.prototype.closeRestaurant.call(this)
                 } else {
-                    return false;
+                    if (GenericRestaurantModel.prototype.visitorLeft.call(this)) 
+						visitors.shift();
+					if (this.attributes.currentOccupancy == 0)
+						GenericRestaurantModel.prototype.closeRestaurant.call(this)
                 }
             }
         });
@@ -123,16 +126,13 @@ var RestaurantView = Backbone.View.extend({
 	return this;
   },
   do_add: function() {
-	var v = new Visitor({firstName: JSON.stringify(r.attributes.currentOccupancy)}); //случайный посетитель
-	this.model.visitorCame(v);
-	console.log("add: ",r.attributes.currentOccupancy,v);
+	this.model.visitorCame();
 	return this;
   },
   do_rem: function() {
-	var v = new Visitor({firstName: JSON.stringify(r.attributes.currentOccupancy)}); //случайный посетитель
-	this.model.visitorLeft(v);
-	console.log("left: ",r.attributes.currentOccupancy,v);
+	this.model.visitorLeft();
 	return this;
+	
   }
 });
 
@@ -140,7 +140,7 @@ var RestaurantView = Backbone.View.extend({
 var r = new RestaurantModel({ restaurantName: "У Озера" });
 //var v = new Visitor({ firstName: "Онуфрий", title: "Отец" });
 //var v = new Visitor({firstname:(Math.random()*90)});
-//var restView = new RestaurantView({ model: r });
+var restView = new RestaurantView({ model: r });
 
 $("body").append(restView.el);
 
