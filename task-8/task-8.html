@@ -1,0 +1,150 @@
+﻿<!doctype html>
+<html>
+<head>
+<script src="js/underscore-1.4.4.js"></script>
+<script src="js/jquery-1.9.1.js"></script>
+<script src="js/json2.js"></script>
+<script src="js/backbone-1.0.0.js"></script>
+<script src="my/generic-restaurant-model.js"></script>
+<style>
+.restaurantClass {
+    width: 300px;
+    height: 200px;
+    border: solid 1px darkred;
+    background-color: #faa;
+    padding: 10px;
+}
+</style>
+</head>
+<body>
+
+<script id="restaurant-message" type="text/underscore-template">
+<div>Restaurant “<%- restaurantName %>” is <b><%- state %></b>.</div>
+<div>Occupancy: “<%- currentOccupancy %>”</div>
+<button id="add-v">+1</button>
+<button id="rem-v">-1</button>
+<button id="open-r">Open</button>
+<button id="close-r">Close</button>
+</script>
+<script class="visitor-add" type="text/underscore-template">
+Add
+</script>
+<script id="visitor-remove" type="text/underscore-template">
+Remove
+</script>
+
+<h2>Backbone's View</h2>
+
+<script>
+var Visitor = Backbone.Model.extend({
+                    defaults: { lastFoursquareCheckin: "" },
+
+                    checkin: function(venue) {
+                        this.set("lastFoursquareCheckin", venue);
+                        if(this.get("title")) {
+                            console.log("Visitor “"
+                                        + this.get("title") + " "
+                                        //+ this.get("firstName")
+                                        + "” checked in at “"
+                                        + venue + "”");
+                        }
+                    }
+                });
+var VisitorsList = Backbone.Collection.extend({ model: Visitor });
+var RestaurantModel = GenericRestaurantModel.extend({
+            initialize: function() {
+                /*
+                 * Сделаем в модели ресторана коллекцию посетителей.
+                 * this.attributes.visitors = new VisitorsList();
+                 * Но лучше так:
+                 */
+                var visitors = new VisitorsList;
+                this.set("visitors", visitors);
+
+                /*
+                 * Кстати, давайте обновлять Foursquare-чекин посетителя,
+                 * как только он появляется в коллекции:
+                 */
+                visitors.on("add", function(visitor) {
+                    visitor.checkin(this.get("restaurantName"));
+                }, this);
+            },
+
+            visitorCame: function(visitor) {
+                // Два раза в один и тот же ресторан не войти.
+                if(!this.get("visitors").get(visitor)) {
+                    // Наследуем старое поведение
+                    if (GenericRestaurantModel.prototype.visitorCame.call(this))
+						this.get("visitors").add(visitor);
+                    // Но также добавляем и новое:
+                    this.get("visitors").add(visitor);
+                }
+            },
+
+            visitorLeft: function(visitor) {
+                var visitors = this.get("visitors");
+                var v = visitors.get(visitor);
+                if(v) {
+                        if (GenericRestaurantModel.prototype.visitorLeft.call(this)) 
+						visitors.remove(v);
+					if (this.attributes.currentOccupancy == 0)
+						GenericRestaurantModel.prototype.closeRestaurant.call(this)
+                } else {
+                    return false;
+                }
+            }
+        });
+
+var RestaurantView = Backbone.View.extend({
+  className: "restaurantClass",
+  // Кэшируем шаблон, данный нам в известном script-блоке.
+  tmpl: _.template($("#restaurant-message").html()),
+  events: {
+	"click #open-r": "do_open", //открыть снова
+	"click #close-r": "do_close", //close again
+	"click #add-v" : "do_add",
+	"click #rem-v": "do_rem",
+  },   
+  initialize: function() {
+    this.listenTo(this.model, "change", this.render);
+    this.render();
+  },
+	
+  // обновить this.el новым содержимым.
+  render: function() {
+    this.$el.html(this.tmpl(this.model.attributes));
+    return this;    // Рекомендуется.
+  },
+  do_close: function() {
+    this.model.closeRestaurant();
+  },
+  do_open: function() {
+	this.model.openRestaurant();
+	return this;
+  },
+  do_add: function() {
+	var v = new Visitor({firstName: JSON.stringify(r.attributes.currentOccupancy)}); //случайный посетитель
+	this.model.visitorCame(v);
+	console.log("add: ",r.attributes.currentOccupancy,v);
+	return this;
+  },
+  do_rem: function() {
+	var v = new Visitor({firstName: JSON.stringify(r.attributes.currentOccupancy)}); //случайный посетитель
+	this.model.visitorLeft(v);
+	console.log("left: ",r.attributes.currentOccupancy,v);
+	return this;
+  }
+});
+
+// Создать конкретный ресторан и конкретного посетителя.
+var r = new RestaurantModel({ restaurantName: "У Озера" });
+//var v = new Visitor({ firstName: "Онуфрий", title: "Отец" });
+var v = new Visitor({firstname:(Math.random()*90)});
+var restView = new RestaurantView({ model: r });
+
+$("body").append(restView.el);
+
+</script>
+
+</body>
+</html>
