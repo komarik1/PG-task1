@@ -73,7 +73,7 @@ var RestaurantModel = GenericRestaurantModel.extend({
 	    closeRestaurant: function (){
 		if (this.attributes.currentOccupancy > 0){
 		   console.log("Can't close Restaurant which still has visitors!");
-		   this.set("state", "closing");  
+		   this.set("state", "closing"); 
 		} else {	
  		   GenericRestaurantModel.prototype.closeRestaurant.call(this);
 		} 
@@ -105,10 +105,11 @@ var RestaurantModel = GenericRestaurantModel.extend({
 			this.closeRestaurant()
                 } else {
 			console.log(this.attributes.currentOccupancy, 'get out');
-		    GenericRestaurantModel.prototype.visitorLeft.call(this);
 		    if (this.attributes.currentOccupancy > 0) {
 			if (GenericRestaurantModel.prototype.visitorLeft.call(this))
-			    visitors.shift();	
+			    visitors.shift();
+			    if (this.attributes.currentOccupancy == 0)
+				this.closeRestaurant();	
 		    } else {
 			this.closeRestaurant();
 		    }
