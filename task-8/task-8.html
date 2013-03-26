@@ -98,16 +98,17 @@ var RestaurantModel = GenericRestaurantModel.extend({
             visitorLeft: function(visitor) {
                 var visitors = this.get("visitors");
                 var v = visitors.get(visitor);
-                if(v) {
+		if(v) {
                     if (GenericRestaurantModel.prototype.visitorLeft.call(this)) 
 	                visitors.remove(v);
 		    if (this.attributes.currentOccupancy == 0)
 			this.closeRestaurant()
                 } else {
 			console.log(this.attributes.currentOccupancy, 'get out');
+		    GenericRestaurantModel.prototype.visitorLeft.call(this);
 		    if (this.attributes.currentOccupancy > 0) {
-			if (GenericRestaurantModel.prototype.visitorLeft.call(this));
-			visitors.shift();
+			if (GenericRestaurantModel.prototype.visitorLeft.call(this))
+			    visitors.shift();	
 		    } else {
 			this.closeRestaurant();
 		    }
