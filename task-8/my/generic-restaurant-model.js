@@ -12,7 +12,7 @@ var GenericRestaurantModel = Backbone.Model.extend({
                 return "Number of visitors must not be negative";
             break;
         case "closed":
-            if(attributes.currentOccupancy == 0)
+            if(attributes.currentOccupancy != 0)
                 return "Number of visitors in a closed restaurant must be 0";
             break;
         default:
